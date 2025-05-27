@@ -48,3 +48,27 @@ toggle_btn.addEventListener("click", ()=>{
 })
 
 
+window.onload = function () {
+const ctx = document.getElementById('myLineChart').getContext('2d');
+//Create a chart'
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['2', '4', '6', '8', '10'],
+        datasets: [{
+            data: [10, 20, 30, 40, 50],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1,
+        }]
+    },
+    option: {
+        responsive: true,
+        plugins: {
+
+        }
+    }
+});
+}
+
