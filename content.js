@@ -3,6 +3,8 @@ let words = 0;
 
 let finalSpeed = 0;
 let iterations = 0;
+let SpeedArray = [];
+let temp = 0;
 
 let cleared = false;
 
@@ -21,6 +23,8 @@ let calculatedTypingSpeed = () => {
   iterations++;
   const speed = words / 0.00833;
 
+  
+
   // Calculate average of current speed and new speed
   finalSpeed += speed;
 
@@ -34,14 +38,17 @@ let calculatedTypingSpeed = () => {
   // send the typing speed to be handled by background
   chrome.runtime.sendMessage({
     type: "contentToPopup",
-    data: (finalSpeed / iterations).toFixed(0),
+    data: {
+      finSpeed : (finalSpeed / iterations).toFixed(0),
+    },
+    
   });
   // reset for next calculations
   words = 0;
 };
 
 
-//throttle function to execute every second
+//throttle function to execute every 500 milisecond
 function throttle(func, delay) {
   let lastCall = 0;
 

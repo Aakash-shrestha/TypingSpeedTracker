@@ -1,4 +1,7 @@
-let currentData = "0";
+let currentData = {
+  currentSpeed: "0",
+  SpeedArray : [],
+};
 
 
 // badge to display the typing text
@@ -7,7 +10,7 @@ function updateBadgeText(text) {
   chrome.action.setBadgeBackgroundColor({ color: "#FFFFFF" });
 }
 // initial call
-updateBadgeText(currentData);
+updateBadgeText(currentData.currentSpeed);
 
 // Inject content script into pre loaded tabs
 chrome.runtime.onInstalled.addListener(() => {
@@ -26,11 +29,18 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Listen for messages
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  updateBadgeText(currentData);
+  updateBadgeText(currentData.currentSpeed);
    
   // message from content
   if (message.type === "contentToPopup") {
-    currentData = message.data;
+    
+    // Push current speed onto array for chart
+    if(message.data.finSpeed != 0){
+      currentData.SpeedArray.push(message.data.finSpeed);
+    }
+    console.log(currentData.SpeedArray);
+
+    currentData.currentSpeed = message.data.finSpeed;
   }
 
   // handle page reload (user presses Enter)
@@ -41,8 +51,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // received request from popup
   if (message.type === "requestData") {
     //update badge on each request from popup
-    updateBadgeText(currentData);
-    sendResponse({ data: currentData }); 
+    updateBadgeText(currentData.currentSpeed);
+    sendResponse({ data: currentData}); 
   }
 
   // handle clear speed
@@ -56,8 +66,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         
         // send message to content of active tab
         chrome.tabs.sendMessage(activeTab.id, {type:'clear'}, (response)=>{
-          currentData = "0";
-          updateBadgeText(currentData);
+          currentData.currentSpeed = "0";
+          updateBadgeText(currentData.currentSpeed);
         })
       }
     });

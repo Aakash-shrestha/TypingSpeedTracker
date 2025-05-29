@@ -8,7 +8,7 @@
 }
 
 .darkmode{
-    --content-bg: rgb(41, 42, 45);
+    --content-bg: #2E3033;
     --primary-color: rgb(255, 255, 255);
     --background-color: rgb(32, 33, 36);
     --btn-bg: rgb(236, 236, 236);
@@ -17,7 +17,7 @@
 }
 
 body{
-    width: 200px;
+    width: 420px;
     height: 250px;
     background-color:  var(--background-color);
 }
@@ -170,4 +170,8 @@ span{
     transition:.5s;
     background:var(--content-bg);
     border-radius:50%;
+  }
+
+  #SpeedLineChart{
+    margin-top: 20px;
   }
