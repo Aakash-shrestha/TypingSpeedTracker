@@ -9,7 +9,7 @@
     },
     "content_scripts" : [
         {
-            "matches": ["*://*.google.com/*", "*://*.bing.com/*"],
+            "matches": ["*://*.google.com/*", "*://*.bing.com/*", "*://chatgpt.com/*"],
             "js": ["content.js"],
             "run_at": "document_idle"
 
@@ -19,6 +19,6 @@
         "default_popup" : "popup.html",
         "default_icon": "icon.png"
     },
-    "host_permissions": ["*://*.google.com/*", "*://*.bing.com/*"]
+    "host_permissions": ["*://*.google.com/*", "*://*.bing.com/*", "*://chatgpt.com/*"]
 
 }

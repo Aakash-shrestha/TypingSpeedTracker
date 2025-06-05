@@ -9,13 +9,14 @@ let temp = 0;
 let cleared = false;
 
 console.log("Content script is running!");
+console.log("✅ content.js is running on", window.location.href);
 
 
 // listen and handle clear message from bg
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if(message.type === "clear"){
+  if (message.type === "clear") {
     cleared = true;
-    sendResponse({status:'success', message: 'response from content'});
+    sendResponse({ status: 'success', message: 'response from content' });
   }
 });
 
@@ -23,13 +24,13 @@ let calculatedTypingSpeed = () => {
   iterations++;
   const speed = words / 0.00833;
 
-  
+
 
   // Calculate average of current speed and new speed
   finalSpeed += speed;
 
   // reset if cleared
-  if(cleared){
+  if (cleared) {
     iterations = 1;
     finalSpeed = 0;
     cleared = false;
@@ -39,9 +40,9 @@ let calculatedTypingSpeed = () => {
   chrome.runtime.sendMessage({
     type: "contentToPopup",
     data: {
-      finSpeed : (finalSpeed / iterations).toFixed(0),
+      finSpeed: (finalSpeed / iterations).toFixed(0),
     },
-    
+
   });
   // reset for next calculations
   words = 0;
@@ -62,23 +63,37 @@ function throttle(func, delay) {
 }
 const throttleCalculate = throttle(calculatedTypingSpeed, 500);
 
-
 // handle when user presses 'Enter' / page reloads
 window.addEventListener("beforeunload", (event) => {
-    chrome.runtime.sendMessage({ type: 'openPopup' });
-  });
+  chrome.runtime.sendMessage({ type: 'openPopup' });
+});
 
 document.addEventListener("input", (event) => {
+  console.log("running on current input field");
   // run only on valid input fields
-  if (event.target.matches("input[type='text'], textarea")) {
+  if (event.target.matches("input[type='text'], textarea") || event.target.isContentEditable) {
+
+    console.log("input event detected on a valid field");
     // logic to detect space pressed
     if (event.data && event.data.length) {
       // increment words typed if space encountered
       if (event.data === " ") {
         words++;
-      } 
+      }
     }
-        
-   throttleCalculate();
+
+    throttleCalculate();
   }
 });
+
+
+// document.addEventListener("keydown", (event) => {
+//   if (
+//     (event.target.matches("input[type='text'], textarea") || event.target.isContentEditable) &&
+//     event.key === "Enter"
+//   ) {
+
+//     chrome.runtime.sendMessage({ type: 'openPopup' });
+//     words = 0;
+//   }
+// });

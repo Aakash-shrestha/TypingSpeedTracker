@@ -68,6 +68,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         chrome.tabs.sendMessage(activeTab.id, {type:'clear'}, (response)=>{
           currentData.currentSpeed = "0";
           updateBadgeText(currentData.currentSpeed);
+          currentData.SpeedArray = [];
+
         })
       }
     });

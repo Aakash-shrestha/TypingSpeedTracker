@@ -19,11 +19,20 @@ requestData();
 
 // handle clear button press
 document.getElementById("clear-btn").addEventListener("click", () => {
+    
+    clearSpeed();   
+})
+
+function clearSpeed(){
     chrome.runtime.sendMessage({ type: 'clearData' }, (response) => {
 
     });
     document.getElementById('typingSpeed').innerHTML = "0";
-})
+    
+    // clear chart when user presses clear button
+    speedArr = [];
+    createChart();
+}
 
 // handle theme change press
 let circle = document.getElementsByClassName("circle");
@@ -56,6 +65,11 @@ function createChart() {
 
     const ctx = document.getElementById('SpeedLineChart').getContext('2d');
     const count = speedArr.length;
+    // clear data if array is too large
+    if (count > 17) {
+        speedArr = [];
+        clearSpeed();
+    }
     console.log("Count of speed array: ", count);
     let xlabel = [];
     for (let i = 1; i <= count; i++) {
