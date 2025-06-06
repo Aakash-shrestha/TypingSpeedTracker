@@ -6,6 +6,7 @@ let iterations = 0;
 let SpeedArray = [];
 let temp = 0;
 
+//please improve everything
 let cleared = false;
 
 console.log("Content script is running!");
